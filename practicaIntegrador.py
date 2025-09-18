@@ -1,3 +1,58 @@
+#Integrantes: Gonzalo Sanchez, Jerónimo Almagro, Danilo Serrano
+#Funciones
+def pedir_golosina():
+    legajo = int(input("Ingresa tu legajo "))
+    if legajo in empleados:
+            print("Bienvenido, tiene acceso gratuito a las golosinas")
+            eleccion_golosina = int(input("¿Que golosina buscas(ingresa su código) "))
+            for i in range(12):
+                if golosinas[i][0] == eleccion_golosina:
+                    contador = 0
+                    if golosinas[i][2] > 0:
+                        contador = contador + 1
+                        print("Golosina encontrada", golosinas[i][1])
+                        golosinas[i][2] -= 1
+                        print("Stock restante: ", golosinas[i][2])
+                        print(golosinas)
+                        
+                        for j in range(len(golosinasPedidas)):
+                            if golosinasPedidas[j][0] == golosinas[i][0]:
+                                golosinasPedidas[j][2] += 1
+                                break
+                        else:
+                            pedidas = [golosinas[i][0], golosinas[i][1], 1]
+                            golosinasPedidas.append(pedidas)
+                        
+                    else:
+                        print("Lo sentimos la golosina ", golosinas[i][1],  " no se encuentra disponible, seleccione otra golosina o ingresa salir si no desea otra golosina")
+                        break
+    else:
+            print("Usted no es un empleado de la empresa")
+def rellenar_golosinas():
+    print("Ingresa contraseña de 3 pasos")
+    pal1 = input("1 palabra ")
+    pal2 = input("2 palabra ")
+    pal3 = input("3 palabra ")
+    if pal1 == clavesTecnico[0] and pal2 == clavesTecnico[1] and pal3 == clavesTecnico[2]:
+            print("Bienvenido Jefe")
+            codigo_agregar_golosinas = int(input("Ingresa el código de la golosina que quieres agregar " ))
+            for i in range(12):
+                if golosinas[i][0] == codigo_agregar_golosinas:
+                    cantidad = input("Ingresa la nueva cantidad de ")
+                    golosinas[i][2] = cantidad
+                    print(golosinas)
+                    
+    else:
+            print("No tiene permiso para ejecutar la función de recarga ")
+def apagar_maquina():
+    print("Historial de compras de hoy")
+    print(golosinasPedidas)
+    acum = 0
+    for pedido in golosinasPedidas:
+            acum += int(pedido[2])
+            
+    print("Se compraron", acum, "GOLOSINAS hoy")
+#Inicio del programa
 golosinas = [
     [1, "Kitkat", 20],
     [2, "Chicles", 50],
@@ -25,7 +80,6 @@ clavesTecnico=("admin", "CCCDDD", "2020")
 
 golosinasPedidas = []
 
-
 opcion = "b"
 
 print("a)Pedir golosina b)Mostrar golosinas c)Rellenar golosinas d)Apagar maquina")
@@ -35,60 +89,15 @@ while opcion <= "d" and opcion >= "a":
     opcion = input("¿Qué deseas hacer? ")
     
     if opcion == "a":
-        
-        legajo = int(input("Ingresa tu legajo "))
-        if legajo in empleados:
-            print("Bienvenido, tiene acceso gratuito a las golosinas")
-            eleccion_golosina = int(input("¿Que golosina buscas(ingresa su código) "))
-            for i in range(12):
-                if golosinas[i][0] == eleccion_golosina:
-                    contador = 0
-                    if golosinas[i][2] > 0:
-                        contador = contador + 1
-                        print("Golosina encontrada", golosinas[i][1])
-                        golosinas[i][2] -= 1
-                        print("Stock restante: ", golosinas[i][2])
-                        
-                        for j in range(len(golosinasPedidas)):
-                            if golosinasPedidas[j][0] == golosinas[i][0]:
-                                golosinasPedidas[j][2] += 1
-                                break
-                        else:
-                            pedidas = [golosinas[i][0], golosinas[i][1], 1]
-                            golosinasPedidas.append(pedidas)
-                        
-                    else:
-                        print("Lo sentimos la golosina ", golosinas[i][1],  " no se encuentra disponible, seleccione otra golosina o ingresa salir si no desea otra golosina")
-                        break
-        else:
-            print("Usted no es un empleado de la empresa")
-            
+        pedir_golosina()
+
     elif opcion == "b":
         print(golosinas)
     elif opcion == "c":
-        print("Ingresa contraseña de 3 pasos")
-        pal1 = input("1 palabra ")
-        pal2 = input("2 palabra ")
-        pal3 = input("3 palabra ")
-        if pal1 == clavesTecnico[0] and pal2 == clavesTecnico[1] and pal3 == clavesTecnico[2]:
-            print("Bienvenido Jefe")
-            codigo_agregar_golosinas = int(input("Ingresa el código de la golosina que quieres agregar " ))
-            for i in range(12):
-                if golosinas[i][0] == codigo_agregar_golosinas:
-                    cantidad = input("Ingresa la nueva cantidad de ")
-                    golosinas[i][2] = cantidad
-                    print(golosinas)
-                    
-        else:
-            print("No tiene permiso para ejecutar la función de recarga ")
+        rellenar_golosinas()
+        
     elif opcion == "d":
-        print("Historial de compras de hoy")
-        print(golosinasPedidas)
-        acum = 0
-        for pedido in golosinasPedidas:
-            acum += int(pedido[2])
-            
-        print("Se compraron", acum, "GOLOSINAS hoy")
+        apagar_maquina()
         break
     else:
         pass
